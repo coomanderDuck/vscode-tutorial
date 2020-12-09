@@ -85,7 +85,10 @@ function Square(props) {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
-    let cage = this.state.lastCage;
+    let cage1 = parseInt(this.state.lastCage/3)+1;
+    let cage2 = parseInt(this.state.lastCage%3)+1;
+    let cageDesc = null;  
+    if (this.state.lastCage) { cageDesc = "Последний ход: " + (parseInt((this.state.lastCage-1)/3)+1) + " " + (parseInt((this.state.lastCage-1)%3)+1)}
 
     const moves = history.map((step, move) => {
       const desc = move ?
@@ -93,7 +96,7 @@ function Square(props) {
         'К началу игры';
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button> Последний ход: {cage}
+          <button onClick={() => this.jumpTo(move)}>{desc}</button> {cageDesc}
         </li>
       );
 
