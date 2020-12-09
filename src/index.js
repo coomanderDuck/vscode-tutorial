@@ -51,7 +51,7 @@ function Square(props) {
           squares: Array(9).fill(null),
         }],
         stepNumber: 0,
-        lastCage: null,
+        lastCage: Array(9).fill(null),
         xIsNext: true,
       };
     }
@@ -60,16 +60,18 @@ function Square(props) {
       const history = this.state.history.slice(0, this.state.stepNumber + 1, );
       const current = history[history.length - 1];
       const squares = current.squares.slice();
+      const cages = this.state.lastCage.slice();
       if (calculateWinner(squares) || squares[i]) {
         return;
       }
       squares[i] = this.state.xIsNext ? 'X' : 'O';
+      cages[i] = i+1;
       this.setState({
         history: history.concat([{
           squares: squares,
         }]),
         stepNumber: history.length,
-        lastCage: i+1,
+        lastCage: cages,
         xIsNext: !this.state.xIsNext,
       });
     }
@@ -85,10 +87,9 @@ function Square(props) {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
-    let cage1 = parseInt(this.state.lastCage/3)+1;
-    let cage2 = parseInt(this.state.lastCage%3)+1;
+    const cages = this.state.lastCage;
     let cageDesc = null;  
-    if (this.state.lastCage) { cageDesc = "Последний ход: " + (parseInt((this.state.lastCage-1)/3)+1) + " " + (parseInt((this.state.lastCage-1)%3)+1)}
+    /*if (this.state.lastCage[this.state.stepNumber]) {*/ cageDesc = "Последний ход: " + (parseInt((this.state.lastCage[this.state.stepNumber]-1)/3)+1) + " " + (parseInt((this.state.lastCage[this.state.stepNumber]-1)%3)+1)//}
 
     const moves = history.map((step, move) => {
       const desc = move ?
@@ -98,9 +99,16 @@ function Square(props) {
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button> {cageDesc}
         </li>
-      );
-
+      ); 
     });
+   const lastPoints = cages.map((cage) => {
+    return (
+      <li key={cage}>
+        {cage}
+      </li>
+    );
+   });
+ 
     let status;
     if (winner) {
       status = 'Выиграл ' + winner;
@@ -118,6 +126,9 @@ function Square(props) {
           <div className="game-info">
           <div>{status}</div>
             <ol>{moves}</ol>
+          </div>
+          <div>
+          {lastPoints}
           </div>
         </div>
       );
