@@ -60,7 +60,7 @@ function Square(props) {
       const history = this.state.history.slice(0, this.state.stepNumber + 1, );
       const current = history[history.length - 1];
       const squares = current.squares.slice();
-      const cages = this.state.lastCage.slice();
+      const cages = this.state.lastCage.slice(0, this.state.stepNumber + 1, );
       if (calculateWinner(squares) || squares[i]) {
         return;
       }
@@ -89,7 +89,6 @@ function Square(props) {
     const winner = calculateWinner(current.squares);
     const cages = this.state.lastCage;
     let cageDesc = null;  
-    /*if (this.state.lastCage[this.state.stepNumber]) {*/ cageDesc =   (parseInt((this.state.lastCage[this.state.stepNumber]-1)/3)+1) + " " + (parseInt((this.state.lastCage[this.state.stepNumber]-1)%3)+1)//}
 
     const moves = history.map((step, move) => {
       const desc = move ?
@@ -97,7 +96,7 @@ function Square(props) {
         'К началу игры';
       return (
         <ul key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button> {/*cageDesc*/}
+          <button onClick={() => this.jumpTo(move)}>{desc}</button> 
         </ul>
       ); 
     });
