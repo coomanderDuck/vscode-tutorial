@@ -51,7 +51,7 @@ function Square(props) {
           squares: Array(9).fill(null),
         }],
         stepNumber: 0,
-        lastCage: Array(9).fill(null),
+        lastCage: [],
         xIsNext: true,
       };
     }
@@ -65,7 +65,7 @@ function Square(props) {
         return;
       }
       squares[i] = this.state.xIsNext ? 'X' : 'O';
-      cages[i] = i+1;
+      cages[this.state.stepNumber + 1] = i+1;
       this.setState({
         history: history.concat([{
           squares: squares,
@@ -89,23 +89,23 @@ function Square(props) {
     const winner = calculateWinner(current.squares);
     const cages = this.state.lastCage;
     let cageDesc = null;  
-    /*if (this.state.lastCage[this.state.stepNumber]) {*/ cageDesc = "Последний ход: " + (parseInt((this.state.lastCage[this.state.stepNumber]-1)/3)+1) + " " + (parseInt((this.state.lastCage[this.state.stepNumber]-1)%3)+1)//}
+    /*if (this.state.lastCage[this.state.stepNumber]) {*/ cageDesc =   (parseInt((this.state.lastCage[this.state.stepNumber]-1)/3)+1) + " " + (parseInt((this.state.lastCage[this.state.stepNumber]-1)%3)+1)//}
 
     const moves = history.map((step, move) => {
       const desc = move ?
         'Перейти к ходу #' + move :
         'К началу игры';
       return (
-        <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button> {cageDesc}
-        </li>
+        <ul key={move}>
+          <button onClick={() => this.jumpTo(move)}>{desc}</button> {/*cageDesc*/}
+        </ul>
       ); 
     });
    const lastPoints = cages.map((cage) => {
     return (
-      <li key={cage}>
-        {cage}
-      </li>
+      <ul key={cage}>
+        {cage = (parseInt((cage-1)/3)+1) + " " + (parseInt((cage-1)%3)+1)}
+      </ul>
     );
    });
  
@@ -125,10 +125,21 @@ function Square(props) {
           </div>
           <div className="game-info">
           <div>{status}</div>
-            <ol>{moves}</ol>
+          <table>
+            <tr>
+            <td>{moves}</td>
+
+          </tr>
+          </table>
           </div>
-          <div>
-          {lastPoints}
+          <div>          
+            <table>
+              <tr>              <td>Ходы</td></tr>
+            <tr>
+
+              <td>{lastPoints}</td>
+            </tr>
+          </table>
           </div>
         </div>
       );
